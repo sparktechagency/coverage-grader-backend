@@ -74,7 +74,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "knuckleswtf/scribe"
+            ]
         }
     },
     "config": {

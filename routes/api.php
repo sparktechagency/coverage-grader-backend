@@ -26,7 +26,7 @@ use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\ReviewVoteController;
 use App\Http\Controllers\Api\V1\User\BlogController as UserBlogController;
 use App\Http\Controllers\Api\V1\User\PolicyManagementController as UserPolicyManagementController;
-use App\Http\Controllers\APi\V1\User\UserController;
+use App\Http\Controllers\Api\V1\User\UserController;
 use Laravel\Cashier\Http\Controllers\WebhookController;
 
 
