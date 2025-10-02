@@ -42,6 +42,7 @@ RUN if [ ${INSTALL_DEV} = true ]; then \
         composer install --no-interaction --optimize-autoloader; \
     else \
         # For production, install only prod packages
+         rm config/scribe.php && \
         composer install --no-interaction --no-dev --optimize-autoloader; \
     fi
 
