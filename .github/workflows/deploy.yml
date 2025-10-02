@@ -1,0 +1,53 @@
+
+name: Build and Push Custom Backend Images to Docker Hub
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build-and-push: #job: 1 Build and Push Images
+    name: Build and Push Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Backend push
+      - name: Build and push Backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/coverage-grader-backend:latest
+
+# Job 2: Deploy to Server
+#   deploy:
+#     name: Deploy to Server
+#     runs-on: ubuntu-latest
+#     needs: build-and-push # Ensure this runs after the build and push job
+
+#     steps:
+#       - name: Deploy on Server
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.SERVER_HOST }}
+#           username: ${{ secrets.SERVER_USER }}
+#           key: ${{ secrets.SERVER_KEY }}
+#           script: |
+#             cd ${{ secrets.APP_DIRECTORY }}
+#             git pull
+#             echo "Pulling latest images from Docker Hub..."
+#             sudo docker-compose -f docker-compose.yml pull
+#             echo "Restarting services..."
+#             sudo docker-compose -f docker-compose.yml up -d
+#             echo "Deployment successful!"

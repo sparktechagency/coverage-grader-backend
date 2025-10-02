@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ReviewRequest;
+use App\Http\Resources\ReviewResource;
+use App\Models\Review;
+use App\Services\ReviewService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+
+class ReviewController extends Controller
+{
+    use AuthorizesRequests;
+    protected ReviewService $reviewService;
+
+    public function __construct(ReviewService $reviewService)
+    {
+        $this->reviewService = $reviewService;
+        $this->authorizeResource(Review::class, 'review');
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            $reviews = $this->reviewService->getAll();
+        } else {
+            $queryCallback = function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            };
+            $reviews = $this->reviewService->getAll($queryCallback);
+        }
+        if ($reviews->isEmpty()) {
+            return response_success('No reviews found.', []);
+        }
+        return  ReviewResource::collection($reviews);
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ReviewRequest $request)
+    {
+        $data = $request->validated();
+        $review = $this->reviewService->createReview($data, $request->user());
+
+        return response_success('Review submitted successfully.', new ReviewResource($review->load('user', 'provider', 'state')));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Review $review)
+    {
+        return response_success('Review retrieved successfully.', new ReviewResource($review->load('user', 'provider', 'state')));
+    }
+
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ReviewRequest $request, Review $review)
+    {
+        $data = $request->validated();
+        $reviewData = $this->reviewService->updateReview($review, $data);
+        return response_success('Review updated successfully.', $reviewData);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Review $review)
+    {
+        $review->delete();
+        return response_success('Review deleted successfully.');
+    }
+
+    /**
+     * update status of review
+     */
+    public function updateStatus(Request $request, Review $review){
+        $request->validate([
+            'status' => 'required|in:approved,pending,rejected',
+        ]);
+        $this->authorize('updateStatus', $review);
+        $review->status = $request->input('status');
+        $review->save();
+
+        return response_success('Review status updated successfully.', new ReviewResource($review));
+    }
+}
