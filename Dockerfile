@@ -43,6 +43,7 @@ RUN if [ ${INSTALL_DEV} = true ]; then \
     else \
         # For production, install only prod packages
          rm config/scribe.php && \
+         rm config/scribe.php app/Providers/TelescopeServiceProvider.php && \
         composer install --no-interaction --no-dev --optimize-autoloader; \
     fi
 
