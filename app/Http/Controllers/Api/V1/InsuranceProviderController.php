@@ -65,8 +65,20 @@ class InsuranceProviderController extends Controller
      */
     public function destroy(InsuranceProvider $provider )
     {
-        $this->insuranceService->deleteProvider($provider); 
+        $this->insuranceService->deleteProvider($provider);
         return response_success('Insurance provider deleted successfully');
+    }
+
+    //update sponsorship status
+    public function updateSponsorshipStatus(Request $request, InsuranceProvider $provider)
+    {
+        $this->authorize('updateSponsorshipStatus', $provider);
+        $request->validate([
+            'is_sponsored' => 'required|boolean',
+        ]);
+        $provider->is_sponsored = $request->input('is_sponsored');
+        $provider->save();
+        return response_success('Sponsorship status updated successfully.', new InsuranceProviderResource($provider));
     }
 
     //* Compare providers

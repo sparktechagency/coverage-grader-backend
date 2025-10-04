@@ -63,4 +63,10 @@ class InsuranceProviderPolicy
     {
         return $user->hasRole('admin');
     }
+
+    // Determine whether the user can update sponsorship status of the model.
+    public function updateSponsorshipStatus(User $user, InsuranceProvider $insuranceProvider): bool
+    {
+        return $user->hasRole('admin');
+    }
 }

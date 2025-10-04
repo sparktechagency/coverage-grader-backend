@@ -166,6 +166,7 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
     //** ----------------Commone Routes---------- */
     //insurance provider management
     Route::apiResource('providers', InsuranceProviderController::class)->except(['create', 'edit']);
+    Route::put('providers/{provider}/sponsorship', [InsuranceProviderController::class, 'updateSponsorshipStatus'])->name('providers.updateSponsorship');
     Route::get('provider/compare', [InsuranceProviderController::class, 'compare'])->name('providers.compare');
     //Review routes
     Route::apiResource('reviews', ReviewController::class)->only(['store', 'index', 'show', 'destroy', 'update']);
