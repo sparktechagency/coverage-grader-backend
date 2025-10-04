@@ -16,12 +16,6 @@ use App\Http\Controllers\Api\V1\Chat\ConversationController;
 use App\Http\Controllers\Api\V1\Chat\GroupController;
 use App\Http\Controllers\Api\V1\Chat\MessageController;
 use App\Http\Controllers\Api\V1\ContactUsController;
-use App\Http\Controllers\Api\V1\Payment\InvoiceController;
-use App\Http\Controllers\Api\V1\Payment\OneTimePaymentController;
-use App\Http\Controllers\Api\V1\Payment\PaymentMethodController;
-use App\Http\Controllers\Api\V1\Payment\RefundController;
-use App\Http\Controllers\Api\V1\Payment\StripePortalController;
-use App\Http\Controllers\Api\V1\Payment\SubscriptionController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\ReviewVoteController;
 use App\Http\Controllers\Api\V1\User\BlogController as UserBlogController;
@@ -30,10 +24,6 @@ use App\Http\Controllers\Api\V1\User\UserController;
 use Laravel\Cashier\Http\Controllers\WebhookController;
 
 
-Route::post(
-    '/v1/stripe/webhook',
-    [WebhookController::class, 'handleWebhook']
-)->name('cashier.webhook');
 
 // --- Public Routes (Authentication) ---
 Route::prefix('v1/auth')->group(function () {
@@ -91,52 +81,6 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::post('/conversations/{conversation}/typing', [MessageController::class, 'typing'])->name('typing');
     });
 
-
-    //**---Payment Method routes---**//
-    Route::prefix('payment')->name('api.v1.payment.')->group(function () {
-
-        // One-time payment routes
-        Route::prefix('one-time')->name('one-time.')->group(function () {
-            Route::post('/checkout-session', [OneTimePaymentController::class, 'createCheckoutSession'])->name('checkout-session');
-            Route::post('/payment-intent', [OneTimePaymentController::class, 'createPaymentIntent'])->name('payment-intent');
-        });
-
-        // Subscription routes
-        Route::prefix('subscriptions')->name('subscriptions.')->group(function () {
-            Route::post('/', [SubscriptionController::class, 'createSubscription'])->name('create');
-            Route::get('/', [SubscriptionController::class, 'showSubscription'])->name('show');
-            Route::post('/cancel', [SubscriptionController::class, 'cancelSubscription'])->name('cancel');
-            Route::post('/resume', [SubscriptionController::class, 'resumeSubscription'])->name('resume');
-            Route::post('/swap', [SubscriptionController::class, 'swapPlan'])->name('swap');
-        });
-
-        // Refund routes
-        Route::prefix('refunds')->name('refunds.')->group(function () {
-            Route::post('/', [RefundController::class, 'requestRefund'])->name('request');
-        });
-
-        // Invoice routes
-        Route::prefix('invoices')->name('invoices.')->group(function () {
-            Route::get('/', [InvoiceController::class, 'index'])->name('index');
-            Route::get('/{invoice}/download', [InvoiceController::class, 'download'])->name('download');
-        });
-
-        // Payment method routes
-        Route::prefix('payment-methods')->name('payment-methods.')->group(function () {
-            Route::get('/', [PaymentMethodController::class, 'index'])->name('index');
-            Route::post('/', [PaymentMethodController::class, 'store'])->name('store');
-            Route::patch('/{paymentMethod}/set-default', [PaymentMethodController::class, 'setDefault'])->name('set-default');
-            Route::delete('/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('destroy');
-            Route::delete('/', [PaymentMethodController::class, 'destroyAll'])->name('destroy-all');
-            //createSetupIntent
-            Route::post('/setup-intent', [PaymentMethodController::class, 'createSetupIntent'])->name('setup-intent');
-            //createSetupSession for save card
-            Route::post('/setup-session', [PaymentMethodController::class, 'createSetupSession'])->name('setup-session');
-        });
-
-        // Stripe billing portal route
-        Route::post('/billing-portal', [StripePortalController::class, 'redirectToPortal'])->name('billing-portal');
-    });
 
 
     //**-----Admin Routes------ */
