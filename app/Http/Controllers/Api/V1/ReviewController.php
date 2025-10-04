@@ -92,6 +92,11 @@ class ReviewController extends Controller
         $review->status = $request->input('status');
         $review->save();
 
+        activity()->causedBy(auth()->user())
+            ->performedOn($review)
+            ->withProperties(['attributes' => ['status' => $review->status]])
+            ->log('Review status updated to "'.$review->status.'" for '.$review->provider->name);
+
         return response_success('Review status updated successfully.', new ReviewResource($review));
     }
 }

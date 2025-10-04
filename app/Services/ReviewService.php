@@ -63,6 +63,10 @@ class ReviewService extends BaseService
         return DB::transaction(function () use ($data, $user) {
             $data['user_id'] = $user->id;
             $review = $this->create($data);
+            activity()->causedBy($user)
+                ->performedOn($review)
+                ->withProperties(['attributes' => $data])
+                ->log($user->first_name . ' ' . $user->last_name . ' submitted a review for '.$review->provider->name);
             return $review;
         });
     }
