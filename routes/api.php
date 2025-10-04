@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\BlogController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\InsuranceProviderController;
 use App\Http\Controllers\Api\V1\Admin\NotificationAlertController;
@@ -105,6 +106,10 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::apiResource('pages', PageController::class)->except(['create', 'edit', 'index', 'update']);
         //faq
         Route::apiResource('faqs', FaqController::class)->except(['edit', 'create']);
+
+        //dashboard
+        Route::get('dashboard/state', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('dashboard/recent-activity', [DashboardController::class, 'recentActivity']);
     });
 
     //** ----------------Commone Routes---------- */

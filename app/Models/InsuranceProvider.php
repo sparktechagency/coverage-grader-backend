@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class InsuranceProvider extends Model
 {
-    use Sluggable;
+    use Sluggable, LogsActivity;
 
     protected $guarded = ['id'];
 
@@ -92,5 +94,14 @@ class InsuranceProvider extends Model
                 return $grade;
             }
         );
+    }
+
+     public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'status','is_sponsored','logo_url']) //customize the fields you want to log
+            ->logOnlyDirty() //log only the changed fields
+            ->setDescriptionForEvent(fn(string $eventName) => "Insurance Provider has been {$eventName}")
+            ->useLogName('insurance_provider_activity');
     }
 }
