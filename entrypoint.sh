@@ -34,10 +34,10 @@ php artisan route:clear
 php artisan view:clear
 
 # Now, cache everything for production performance
-# echo "Caching configurations for production..."
-# php artisan config:cache
-# php artisan route:cache
-# php artisan view:cache
+echo "Caching configurations for production..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
 # Run database migrations automatically
 echo "Running database migrations..."
