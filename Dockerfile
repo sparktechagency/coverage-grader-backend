@@ -23,6 +23,7 @@ RUN apk add --no-cache \
 
 # Copy custom PHP configuration
 COPY php/custom.ini /usr/local/etc/php/conf.d/custom.ini
+COPY php/www-custom.conf /usr/local/etc/php-fpm.d/www-custom.conf
 
 # Get the latest Composer binary
 COPY --from=composer:2.8.12 /usr/bin/composer /usr/bin/composer
