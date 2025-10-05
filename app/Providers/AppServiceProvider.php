@@ -18,6 +18,7 @@ use App\Observers\Admin\FaqObserver;
 use App\Observers\InsuranceProviderObserver;
 use App\Observers\Admin\NotificationAlertObserver;
 use App\Observers\Admin\PolicyCategoryObserver;
+use App\Observers\ContactObserver;
 use App\Observers\User\ReviewObserver;
 use App\Observers\UserObserve;
 use App\Policies\ContactPolicy;
@@ -70,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         Faq::observe(FaqObserver::class);
         Blog::observe(BlogObserver::class);
         Review::observe(ReviewObserver::class);
+        Contact::observe(ContactObserver::class);
 
     }
 }
