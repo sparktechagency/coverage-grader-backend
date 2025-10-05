@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\InsuranceProviderController;
 use App\Http\Controllers\Api\V1\Admin\NotificationAlertController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
 use App\Http\Controllers\Api\V1\Admin\PolicyManagementController;
+use App\Http\Controllers\Api\V1\Admin\ReportsController;
 use App\Http\Controllers\Api\V1\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -57,33 +58,6 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::put('/update', [ProfileController::class, 'updateProfile'])->name('update');
     });
 
-    /**
-     ** Chat Module Routes
-     */
-    Route::prefix('chat')->name('api.v1.chat.')->group(function () {
-        // Conversations
-        Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
-        Route::post('/conversations', [ConversationController::class, 'store'])->name('conversations.store');
-
-        // Messages
-        Route::get('/conversations/{conversation}/messages', [MessageController::class, 'index'])->name('messages.index');
-        Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
-        Route::patch('/messages/{message}', [MessageController::class, 'update'])->name('messages.update');
-        Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
-        Route::post('/messages/read', [MessageController::class, 'markAsRead'])->name('messages.read');
-
-        // Group Management
-        Route::post('/groups/{conversation}/members', [GroupController::class, 'addMember'])->name('groups.members.add');
-        Route::delete('/groups/{conversation}/members', [GroupController::class, 'removeMember'])->name('groups.members.remove');
-        Route::post('/groups/{conversation}/leave', [GroupController::class, 'leaveGroup'])->name('groups.leave');
-        Route::post('/groups/{conversation}/promote', [GroupController::class, 'promoteToAdmin'])->name('groups.promote');
-        Route::post('/groups/{conversation}/demote', [GroupController::class, 'demoteToMember'])->name('groups.demote');
-
-        // Real-time
-        Route::post('/conversations/{conversation}/typing', [MessageController::class, 'typing'])->name('typing');
-    });
-
-
 
     //**-----Admin Routes------ */
     Route::middleware('can:access-admin')->prefix('admin')->name('api.v1.admin.')->group(function () {
@@ -94,6 +68,7 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
 
         //Policy Management
         Route::apiResource('policies', PolicyManagementController::class)->except(['create', 'edit']);
+        Route::put('policies/{policy}/status', [PolicyManagementController::class, 'updateStatus'])->name('policies.updateStatus');
 
         //Notification Alert management
         Route::apiResource('notifications', NotificationAlertController::class)->except(['create', 'edit', 'update']);
@@ -111,6 +86,13 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         //dashboard
         Route::get('dashboard/state', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('dashboard/recent-activity', [DashboardController::class, 'recentActivity']);
+
+        Route::prefix('reports-analytics')->group(function () {
+        Route::get('/charts', [ReportsController::class, 'getChartData']);
+        Route::get('/recent-reports', [ReportsController::class, 'getRecentReports']);
+        Route::post('/generate-report', [ReportsController::class, 'generateReport']);
+        Route::get('/download/{id}', [ReportsController::class, 'downloadReport'])->name('report.download');
+    });
     });
 
     //** ----------------Commone Routes---------- */

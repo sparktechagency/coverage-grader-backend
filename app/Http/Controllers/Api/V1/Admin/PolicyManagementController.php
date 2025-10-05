@@ -66,4 +66,15 @@ class PolicyManagementController extends Controller
         $this->policyCategoryService->deleteCategory($policy);
         return response_success('Policy category deleted successfully');
     }
+
+    //update active status of policy category
+    public function updateStatus(Request $request, PolicyCategory $policy)
+    {
+        $request->validate([
+            'status' => 'required|in:active,inactive',
+        ]);
+        $policy->status = $request->input('status');
+        $policy->save();
+        return response_success('Policy category status updated successfully.', $policy);
+    }
 }
