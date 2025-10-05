@@ -48,7 +48,7 @@ class CustomAlert extends Notification implements ShouldQueue
     {
         return [
             'alert_id' => $this->notificationAlert->id,
-            'subject' => $this->notificationAlert->subject,
+            'title' => $this->notificationAlert->notification_type,
             'body' => $this->notificationAlert->body,
         ];
     }
@@ -65,7 +65,7 @@ class CustomAlert extends Notification implements ShouldQueue
 
         return [
             'tokens' => $tokens,
-            'title' => $this->notificationAlert->subject,
+            'title' => $this->notificationAlert->notification_type,
             'body' => $this->notificationAlert->body,
             'data' => [
                 'alert_id' => (string)$this->notificationAlert->id,

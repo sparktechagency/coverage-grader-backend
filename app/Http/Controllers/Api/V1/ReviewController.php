@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReviewRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
+use App\Notifications\ReviewStatusNotification;
 use App\Services\ReviewService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class ReviewController extends Controller
 {
@@ -91,7 +93,9 @@ class ReviewController extends Controller
         $this->authorize('updateStatus', $review);
         $review->status = $request->input('status');
         $review->save();
-
+        //sent notification to user about status change
+        // Notify user about the status change
+        Notification::send($review->user, new ReviewStatusNotification($review));
         activity()->causedBy(auth()->user())
             ->performedOn($review)
             ->withProperties(['attributes' => ['status' => $review->status]])

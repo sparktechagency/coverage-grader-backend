@@ -8,6 +8,8 @@ use Spatie\QueryBuilder\AllowedFilter;
 use App\Filters\GlobalSearchFilter;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ReviewNotification;
 
 class ReviewService extends BaseService
 {
@@ -63,6 +65,10 @@ class ReviewService extends BaseService
         return DB::transaction(function () use ($data, $user) {
             $data['user_id'] = $user->id;
             $review = $this->create($data);
+            // dd($review);
+            //sent notification to admin
+            // Notify admin about the new review
+            Notification::send(User::role('admin')->get(), new ReviewNotification($review));
             activity()->causedBy($user)
                 ->performedOn($review)
                 ->withProperties(['attributes' => $data])

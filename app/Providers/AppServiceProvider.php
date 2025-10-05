@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         Review::class => ReviewPolicy::class,
         InsuranceProvider::class => InsuranceProviderPolicy::class,
         Contact::class => ContactPolicy::class,
+        \Illuminate\Notifications\DatabaseNotification::class => \App\Policies\NotificationPolicy::class,
     ];
 
 

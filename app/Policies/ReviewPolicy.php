@@ -16,7 +16,7 @@ class ReviewPolicy
             return true;
         }
 
-        return null; 
+        return null;
     }
     /**
      * Determine whether the user can view any models.
@@ -32,6 +32,12 @@ class ReviewPolicy
     public function view(User $user, Review $review): bool
     {
         return $user->id === $review->user_id;
+    }
+
+    //create review only by authenticated user
+    public function create(?User $user): bool
+    {
+        return $user !== null;
     }
 
 

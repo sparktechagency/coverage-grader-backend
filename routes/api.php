@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Chat\ConversationController;
 use App\Http\Controllers\Api\V1\Chat\GroupController;
 use App\Http\Controllers\Api\V1\Chat\MessageController;
 use App\Http\Controllers\Api\V1\ContactUsController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\ReviewVoteController;
 use App\Http\Controllers\Api\V1\User\BlogController as UserBlogController;
@@ -95,7 +96,7 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::apiResource('policies', PolicyManagementController::class)->except(['create', 'edit']);
 
         //Notification Alert management
-        Route::apiResource('notifications', NotificationAlertController::class)->except(['create', 'edit', 'update', 'destroy']);
+        Route::apiResource('notifications', NotificationAlertController::class)->except(['create', 'edit', 'update']);
         Route::get('notifications/stats', [NotificationAlertController::class, 'dashboardStats'])->name('notifications.stats');
 
         //Blog management
@@ -122,7 +123,7 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
     Route::put('reviews/{review}/status', [ReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
 
     //Review vote routes
-    Route::get('providers/{provider}/reviews', [ReviewVoteController::class, 'index'])->name('reviews.index');
+    Route::get('providers/{provider}/reviews', [ReviewVoteController::class, 'index']);
     Route::post('reviews/{review}/vote', [ReviewVoteController::class, 'vote'])->name('reviews.vote');
     //Contact us routes
     Route::apiResource('contacts', ContactUsController::class)->only(['store', 'index', 'show', 'destroy']);
@@ -144,6 +145,13 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         //get all states
         Route::get('states', [UserController::class, 'getAllStates'])->name('states.getAll');
     });
+
+    //**---------Notification routes----------- */
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/stats', [NotificationController::class, 'stats']);
+    Route::put('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
 });
 
 
