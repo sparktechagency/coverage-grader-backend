@@ -109,7 +109,7 @@ class ReviewService extends BaseService
                     DB::raw('ROUND(AVG(JSON_EXTRACT(scores, "$.service")), 1) as service'),
                     DB::raw('ROUND(AVG(JSON_EXTRACT(scores, "$.pricing")), 1) as pricing'),
                     DB::raw('ROUND(AVG(JSON_EXTRACT(scores, "$.coverage")), 1) as coverage'),
-                    DB::raw('ROUND(AVG(JSON_EXTRACT(scores, "$.transparency_trust")), 1) as transparency_trust')
+                    DB::raw('ROUND(AVG(JSON_EXTRACT(scores, "$.trust")), 1) as trust')
                 )->first();
         } else {
             $avgCategoryScores = [
@@ -117,7 +117,7 @@ class ReviewService extends BaseService
                 'service' => 0,
                 'pricing' => 0,
                 'coverage' => 0,
-                'transparency_trust' => 0,
+                'trust' => 0,
             ];
         }
         DB::table('insurance_providers')->where('id', $providerId)->update([

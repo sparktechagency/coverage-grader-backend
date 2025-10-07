@@ -16,6 +16,7 @@ class InsuranceProviderController extends Controller
     protected InsuranceProviderService $insuranceService;
     public function __construct(InsuranceProviderService $insuranceService)
     {
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'compare']);
         $this->insuranceService = $insuranceService;
         $this->authorizeResource(InsuranceProvider::class, 'provider');
     }

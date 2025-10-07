@@ -27,7 +27,7 @@ class InsuranceProviderResource extends JsonResource
             'is_sponsored' => $this->is_sponsored,
             'status' => $this->status,
             'about' => $this->about,
-            'states_count' => $this->whenLoaded('states', function () {
+            'states_count' => $this->whenCounted('states', function () {
                 return $this->states_count;
             }),
             'reviews_count' => $this->review_count,

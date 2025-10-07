@@ -32,7 +32,7 @@ class ReviewRequest extends BaseRequest
             'scores.service' => ['required', 'integer', 'min:1', 'max:5'],
             'scores.pricing' => ['required', 'integer', 'min:1', 'max:5'],
             'scores.coverage' => ['required', 'integer', 'min:1', 'max:5'],
-            'scores.transparency_trust' => ['required', 'integer', 'min:1', 'max:5'],
+            'scores.trust' => ['required', 'integer', 'min:1', 'max:5'],
         ];
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
@@ -45,7 +45,7 @@ class ReviewRequest extends BaseRequest
         }
 
         return $rules;
-        
+
     }
 }
 

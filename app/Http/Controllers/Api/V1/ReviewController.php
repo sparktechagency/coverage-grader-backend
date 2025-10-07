@@ -19,6 +19,7 @@ class ReviewController extends Controller
 
     public function __construct(ReviewService $reviewService)
     {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
         $this->reviewService = $reviewService;
         $this->authorizeResource(Review::class, 'review');
     }
@@ -27,19 +28,29 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        if ($user->hasRole('admin')) {
+        $user = auth()->user(); // Get the user. It can be null.
+
+        if ($user && $user->hasRole('admin')) {
             $reviews = $this->reviewService->getAll();
-        } else {
+        }
+        elseif ($user) {
             $queryCallback = function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             };
             $reviews = $this->reviewService->getAll($queryCallback);
         }
+        else {
+            $queryCallback = function ($query) {
+                $query->where('status', 'approved');
+            };
+            $reviews = $this->reviewService->getAll($queryCallback);
+        }
+
         if ($reviews->isEmpty()) {
             return response_success('No reviews found.', []);
         }
-        return  ReviewResource::collection($reviews);
+
+        return ReviewResource::collection($reviews);
     }
 
 
@@ -86,7 +97,8 @@ class ReviewController extends Controller
     /**
      * update status of review
      */
-    public function updateStatus(Request $request, Review $review){
+    public function updateStatus(Request $request, Review $review)
+    {
         $request->validate([
             'status' => 'required|in:approved,pending,rejected',
         ]);
@@ -99,7 +111,7 @@ class ReviewController extends Controller
         activity()->causedBy(auth()->user())
             ->performedOn($review)
             ->withProperties(['attributes' => ['status' => $review->status]])
-            ->log('Review status updated to "'.$review->status.'" for '.$review->provider->name);
+            ->log('Review status updated to "' . $review->status . '" for ' . $review->provider->name);
 
         return response_success('Review status updated successfully.', new ReviewResource($review));
     }

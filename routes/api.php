@@ -99,22 +99,38 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
     //insurance provider management
     Route::apiResource('providers', InsuranceProviderController::class)->except(['create', 'edit']);
     Route::put('providers/{provider}/sponsorship', [InsuranceProviderController::class, 'updateSponsorshipStatus'])->name('providers.updateSponsorship');
-    Route::get('provider/compare', [InsuranceProviderController::class, 'compare'])->name('providers.compare');
-    //Review routes
-    Route::apiResource('reviews', ReviewController::class)->only(['store', 'index', 'show', 'destroy', 'update']);
-    Route::put('reviews/{review}/status', [ReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
 
     //Review vote routes
-    Route::get('providers/{provider}/reviews', [ReviewVoteController::class, 'index']);
     Route::post('reviews/{review}/vote', [ReviewVoteController::class, 'vote'])->name('reviews.vote');
     //Contact us routes
     Route::apiResource('contacts', ContactUsController::class)->only(['store', 'index', 'show', 'destroy']);
     Route::put('contacts/{contact}/mark-as-read', [ContactUsController::class, 'markAsRead']);
 
 
+    //**---------Notification routes----------- */
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/stats', [NotificationController::class, 'stats']);
+    Route::put('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
+});
 
-    //** -------------User Routes-------------- */
-    Route::prefix('user')->name('api.v1.user.')->group(function () {
+//** middleware define inside constructor */
+Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () {
+    //insurance provider management
+    Route::apiResource('providers', InsuranceProviderController::class)->except(['create', 'edit']);
+    Route::put('providers/{provider}/sponsorship', [InsuranceProviderController::class, 'updateSponsorshipStatus'])->name('providers.updateSponsorship');
+    Route::get('provider/compare', [InsuranceProviderController::class, 'compare'])->name('providers.compare');
+
+    //Review routes
+    Route::apiResource('reviews', ReviewController::class)->only(['store', 'index', 'show', 'destroy', 'update']);
+    Route::put('reviews/{review}/status', [ReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
+    //Review vote routes
+    Route::get('providers/{provider}/reviews', [ReviewVoteController::class, 'index']);
+});
+
+ //** -------------User Routes-------------- */
+    Route::prefix('v1/user')->name('api.v1.user.')->group(function () {
         //Policy Management
         Route::apiResource('policies', UserPolicyManagementController::class)->only(['index', 'show']);
         //Blog management
@@ -128,15 +144,7 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::get('states', [UserController::class, 'getAllStates'])->name('states.getAll');
     });
 
-    //**---------Notification routes----------- */
-    Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::get('/notifications/stats', [NotificationController::class, 'stats']);
-    Route::put('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']);
-    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
-    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
-});
-
-
 Route::fallback(function () {
     return response_error('The requested API endpoint does not exist.', [], 404);
 });
+
