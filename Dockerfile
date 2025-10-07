@@ -11,6 +11,7 @@ WORKDIR /var/www
 # ADDED netcat-openbsd to wait for database connection
 RUN apk add --no-cache \
     netcat-openbsd \
+    fcgi \
     git curl zip unzip libzip-dev libpng-dev libjpeg-turbo-dev \
     freetype-dev libwebp-dev postgresql-dev icu-dev \
     oniguruma-dev \
