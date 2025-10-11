@@ -8,8 +8,5 @@
 <body>
     <h1>Kazi Omar Faruk</h1>
     <p>Student ID: 2012020163</p>
-    <p>Section: 02</p>
-    <p>Course: CSE 4102</p>
-    <p>Term: Spring 2024</p>
 </body>
 </html>
