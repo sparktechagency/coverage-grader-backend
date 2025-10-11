@@ -33,6 +33,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             \App\Http\Middleware\UpdateLastUserActivity::class,
         ]);
+        $middleware->alias([
+            'optional.auth' => \App\Http\Middleware\OptionalAuthenticate::class,
+        ]);
     })
     ->withSchedule(function (Schedule $schedule) {
          $schedule->command('activitylog:clean --days=365')->daily();

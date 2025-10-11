@@ -26,7 +26,7 @@ chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 
 # --- Laravel Optimization ---
-# CRITICAL FIX: Clear any previous cached configurations before creating new ones.
+# Clear any previous cached configurations before creating new ones.
 # This prevents errors from old or corrupted cache files.
 echo "Clearing old Laravel caches..."
 php artisan config:clear
@@ -34,17 +34,39 @@ php artisan route:clear
 php artisan view:clear
 
 # Now, cache everything for production performance
-# echo "Caching configurations for production..."
-# php artisan config:cache
-# php artisan route:cache
-# php artisan view:cache
+if [ "$INSTALL_DEV" != "true" ]; then
+    echo "PRODUCTION MODE: Running optimizations and migrations..."
 
-# Run database migrations automatically
-echo "Running database migrations..."
-php artisan migrate --force
+
+    echo "Caching configurations for production..."
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+
+    # Run database migrations automatically
+    # echo "Running database migrations..."
+    # php artisan migrate --force
+
+else
+    # This will run in your local environment
+    echo "DEVELOPMENT MODE: Skipping optimizations and migrations."
+fi
+
 
 
 # --- Execute the main command ---
-# This will run the command passed to the container, which is "php-fpm" by default.
-echo "Starting PHP-FPM..."
-exec "$@"
+role=${1}
+if [ "$role" = "queue" ]; then
+    echo "Running the queue worker..."
+    shift
+    exec php artisan "$@"
+
+elif [ "$role" = "scheduler" ]; then
+    echo "Running the scheduler..."
+    shift
+    exec "$@"
+
+else
+    echo "Starting PHP-FPM..."
+    exec php-fpm
+fi

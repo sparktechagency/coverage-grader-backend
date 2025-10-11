@@ -16,6 +16,8 @@ class InsuranceProviderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $avgScores = $this->avg_scores ? json_decode($this->avg_scores) : null;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -34,7 +36,12 @@ class InsuranceProviderResource extends JsonResource
             'avg_overall_rating' => $this->avg_overall_rating,
             'avg_grade' => $this->avg_grade,
             'formatted_overall_avg_score' =>"{$this->avg_overall_rating}/5 ({$this->avg_grade})",
-            'avg_score' => json_decode($this->avg_scores),
+            'avg_score' => $avgScores,
+            'avg_trust' => $avgScores?->trust,
+            'avg_claims' => $avgScores?->claims,
+            'avg_pricing' => $avgScores?->pricing,
+            'avg_service' => $avgScores?->service,
+            'avg_coverage' => $avgScores?->coverage,
             'created_at' => $this->created_at ? $this->created_at->toDateTimeString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
             'policies' => PolicyCategoryResource::collection($this->whenLoaded('policyCategories')),

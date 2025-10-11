@@ -20,6 +20,7 @@ class ReviewController extends Controller
     public function __construct(ReviewService $reviewService)
     {
         $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('optional.auth')->only(['index']);
         $this->reviewService = $reviewService;
         $this->authorizeResource(Review::class, 'review');
     }

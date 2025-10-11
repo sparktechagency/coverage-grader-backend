@@ -74,18 +74,10 @@ class InsuranceProvider extends Model
             get: function () {
                 $average = $this->avg_overall_rating;
                 $grade = '';
-                if ($average >= 4.8) {
-                    $grade = 'A+';
-                } elseif ($average >= 4.5) {
+                if ($average >= 4.5) {
                     $grade = 'A';
-                } elseif ($average >= 4.0) {
-                    $grade = 'A-';
-                } elseif ($average >= 3.8) {
-                    $grade = 'B+';
                 } elseif ($average >= 3.5) {
                     $grade = 'B';
-                } elseif ($average >= 3.0) {
-                    $grade = 'B-';
                 } elseif ($average >= 2.5) {
                     $grade = 'C';
                 } else {
