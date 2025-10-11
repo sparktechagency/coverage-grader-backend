@@ -34,6 +34,7 @@ class InsuranceProviderService extends BaseService
             'price',
             AllowedFilter::exact('status'),
             AllowedFilter::exact('policyCategories.slug'),
+            'states.name'
         ];
     }
 
@@ -112,12 +113,12 @@ class InsuranceProviderService extends BaseService
     //**Compaire providers */
     public function getForComparison(array $providerIds): Collection
     {
-       
+
         return $this->cache(__FUNCTION__, func_get_args(), function () use ($providerIds) {
             return $this->model
                 ->whereIn('id', $providerIds)
                 ->withCount('reviews')
-                ->with(['states', 'policyCategories']) 
+                ->with(['states', 'policyCategories'])
                 ->get();
         });
     }

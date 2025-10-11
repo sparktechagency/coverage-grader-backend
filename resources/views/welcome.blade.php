@@ -8,6 +8,7 @@
 <body>
     <h1>Kazi Omar Faruk</h1>
     <p>Student ID: 2012020163</p>
-    <p>new update in morning</p>
+    <p>new update</p>
+    <p>ngixn bind</p>
 </body>
 </html>
