@@ -23,3 +23,5 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::create(['name' => 'user']);
     }
 }
+
+// php artisan db:seed --class=RolesAndPermissionsSeeder

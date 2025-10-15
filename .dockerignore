@@ -1,1 +1,5 @@
 ./public/storage
+bootstrap/cache/*.php
+storage/framework/sessions/*
+storage/framework/views/*.php
+storage/logs/*.log

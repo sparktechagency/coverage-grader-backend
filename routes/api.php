@@ -14,13 +14,11 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\Auth\ProfileController;
 use App\Http\Controllers\Api\V1\Auth\VerificationController;
-use App\Http\Controllers\Api\V1\Chat\ConversationController;
-use App\Http\Controllers\Api\V1\Chat\GroupController;
-use App\Http\Controllers\Api\V1\Chat\MessageController;
 use App\Http\Controllers\Api\V1\ContactUsController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\ReviewVoteController;
+use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\User\BlogController as UserBlogController;
 use App\Http\Controllers\Api\V1\User\PolicyManagementController as UserPolicyManagementController;
 use App\Http\Controllers\Api\V1\User\UserController;
@@ -127,6 +125,9 @@ Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () 
     Route::put('reviews/{review}/status', [ReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
     //Review vote routes
     Route::get('providers/{provider}/reviews', [ReviewVoteController::class, 'index']);
+
+    //search route
+    Route::get('search', [SearchController::class, 'search'])->name('search');
 });
 
  //** -------------User Routes-------------- */

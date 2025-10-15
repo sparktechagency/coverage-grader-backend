@@ -33,6 +33,9 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
+echo "Forcefully clearing old Laravel cache files..."
+rm -f /var/www/bootstrap/cache/*.php
+
 # Now, cache everything for production performance
 if [ "$INSTALL_DEV" != "true" ]; then
     echo "PRODUCTION MODE: Running optimizations and migrations..."
