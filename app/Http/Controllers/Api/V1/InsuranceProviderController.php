@@ -25,7 +25,7 @@ class InsuranceProviderController extends Controller
      */
     public function index()
     {
-        $providers = $this->insuranceService->getAll();
+        $providers = $this->insuranceService->getAll(null , false);
         return InsuranceProviderResource::collection($providers);
     }
 

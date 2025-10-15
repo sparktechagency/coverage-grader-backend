@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InsuranceProviderResource;
 use App\Models\InsuranceProvider;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,6 @@ class SearchController extends Controller
         if($provider->isEmpty()){
             return response_error('No insurance providers found', [], 404);
         }
-        return response_success('Insurance providers found', $provider);
+        return InsuranceProviderResource::collection($provider);
     }
 }
