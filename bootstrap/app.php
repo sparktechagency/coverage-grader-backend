@@ -13,6 +13,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Arr;
+use Fruitcake\Cors\HandleCors;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -36,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'optional.auth' => \App\Http\Middleware\OptionalAuthenticate::class,
         ]);
+        $middleware->prepend(HandleCors::class);
     })
     ->withSchedule(function (Schedule $schedule) {
          $schedule->command('activitylog:clean --days=365')->daily();
