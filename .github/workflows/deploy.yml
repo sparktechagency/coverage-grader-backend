@@ -43,5 +43,7 @@ jobs:
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate --no-deps coverage-app-2 queue-worker scheduler nginx-proxy-2
             echo "Running database migrations..."
             docker compose -f docker-compose.yml -f docker-compose.prod.yml exec coverage-app-2 php artisan migrate --force
+            docker compose exec coverage-app-2 php artisan optimize:clear
+            docker compose exec coverage-app-2 php artisan storage:link
             docker image prune -f
 
