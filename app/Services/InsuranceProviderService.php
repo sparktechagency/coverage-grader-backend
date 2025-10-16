@@ -86,7 +86,7 @@ class InsuranceProviderService extends BaseService
         if ($request->hasFile('logo_url')) {
             //delete old image and upload new one
             $this->deleteFile($provider->logo_url);
-            $data['logo_url'] = $this->handleFileUpload($request, 'logo_url', 'insurance_providers', $provider->logo_url, null, 90, true);
+            $data['logo_url'] = $this->handleFileUpload($request, 'logo_url', 'insurance_providers', null, null, 90, true);
         }
 
         //relation
