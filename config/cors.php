@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://66.29.135.26.nip.io'],
+    'allowed_origins' => ['http://66.29.135.26.nip.io', 'http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 
