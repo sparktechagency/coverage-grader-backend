@@ -35,6 +35,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'optional.auth' => \App\Http\Middleware\OptionalAuthenticate::class,
         ]);
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return null;
+            }
+
+            return route('login');
+        });
     })
     ->withSchedule(function (Schedule $schedule) {
          $schedule->command('activitylog:clean --days=365')->daily();

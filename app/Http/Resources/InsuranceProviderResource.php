@@ -21,6 +21,7 @@ class InsuranceProviderResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'title' => $this->title,
             'slug' => $this->slug,
             'logo_url' => $this->logo_url,
             'pros' => $this->pros,
