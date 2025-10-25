@@ -87,15 +87,15 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::get('dashboard/recent-activity', [DashboardController::class, 'recentActivity']);
 
         Route::prefix('reports-analytics')->group(function () {
-        Route::get('/charts', [ReportsController::class, 'getChartData']);
-        Route::get('/recent-reports', [ReportsController::class, 'getRecentReports']);
-        Route::post('/generate-report', [ReportsController::class, 'generateReport']);
-        Route::get('/download/{id}', [ReportsController::class, 'downloadReport'])->name('report.download');
+            Route::get('/charts', [ReportsController::class, 'getChartData']);
+            Route::get('/recent-reports', [ReportsController::class, 'getRecentReports']);
+            Route::post('/generate-report', [ReportsController::class, 'generateReport']);
+            Route::get('/download/{id}', [ReportsController::class, 'downloadReport'])->name('report.download');
+        });
+
 
         //social media settings
-        Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
-        Route::post('social-media-settings', [SettingsController::class, 'socialMediaSettings'])->name('settings.socialMedia.update');
-    });
+        Route::post('social-media-settings', [SettingsController::class, 'socialMediaSettings']);
     });
 
     //** ----------------Commone Routes---------- */
@@ -138,22 +138,21 @@ Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () 
     Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
 });
 
- //** -------------User Routes-------------- */
-    Route::prefix('v1/user')->name('api.v1.user.')->group(function () {
-        //Policy Management
-        Route::apiResource('policies', UserPolicyManagementController::class)->only(['index', 'show']);
-        //Blog management
-        Route::apiResource('blogs', UserBlogController::class)->only(['index', 'show']);
-        //get pages by type
-        Route::get('pages/{type}', [UserController::class, 'getAllPages'])->name('pages.getByType');
-        //get faqs
-        Route::get('faqs', [UserController::class, 'getFaqs'])->name('faqs.getAll');
+//** -------------User Routes-------------- */
+Route::prefix('v1/user')->name('api.v1.user.')->group(function () {
+    //Policy Management
+    Route::apiResource('policies', UserPolicyManagementController::class)->only(['index', 'show']);
+    //Blog management
+    Route::apiResource('blogs', UserBlogController::class)->only(['index', 'show']);
+    //get pages by type
+    Route::get('pages/{type}', [UserController::class, 'getAllPages'])->name('pages.getByType');
+    //get faqs
+    Route::get('faqs', [UserController::class, 'getFaqs'])->name('faqs.getAll');
 
-        //get all states
-        Route::get('states', [UserController::class, 'getAllStates'])->name('states.getAll');
-    });
+    //get all states
+    Route::get('states', [UserController::class, 'getAllStates'])->name('states.getAll');
+});
 
 Route::fallback(function () {
     return response_error('The requested API endpoint does not exist.', [], 404);
 });
-

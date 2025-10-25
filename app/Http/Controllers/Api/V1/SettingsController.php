@@ -29,6 +29,9 @@ class SettingsController extends Controller
 public function getSocialMediaSettings()
 {
     $socialMedia = SocialMedia::first();
+    if(!$socialMedia) {
+        return response_error('No social media settings found', [], 404);
+    }
     return response_success('Social media settings retrieved successfully', $socialMedia);
 }
 
