@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\ReviewVoteController;
 use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\SettingsController;
 use App\Http\Controllers\Api\V1\User\BlogController as UserBlogController;
 use App\Http\Controllers\Api\V1\User\PolicyManagementController as UserPolicyManagementController;
 use App\Http\Controllers\Api\V1\User\UserController;
@@ -90,6 +91,10 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
         Route::get('/recent-reports', [ReportsController::class, 'getRecentReports']);
         Route::post('/generate-report', [ReportsController::class, 'generateReport']);
         Route::get('/download/{id}', [ReportsController::class, 'downloadReport'])->name('report.download');
+
+        //social media settings
+        Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
+        Route::post('social-media-settings', [SettingsController::class, 'socialMediaSettings'])->name('settings.socialMedia.update');
     });
     });
 
@@ -128,6 +133,9 @@ Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () 
 
     //search route
     Route::get('search', [SearchController::class, 'search'])->name('search');
+
+    //social media settings
+    Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
 });
 
  //** -------------User Routes-------------- */
