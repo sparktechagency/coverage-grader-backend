@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\BlogController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Admin\MetaDataController;
 use App\Http\Controllers\Api\V1\InsuranceProviderController;
 use App\Http\Controllers\Api\V1\Admin\NotificationAlertController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
@@ -109,6 +110,9 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
     Route::apiResource('contacts', ContactUsController::class)->only(['store', 'index', 'show', 'destroy']);
     Route::put('contacts/{contact}/mark-as-read', [ContactUsController::class, 'markAsRead']);
 
+    //metadata
+    Route::apiResource('meta-datas', MetaDataController::class)->except(['create', 'edit', 'update']);
+
 
     //**---------Notification routes----------- */
     Route::get('/notifications', [NotificationController::class, 'index']);
@@ -136,6 +140,8 @@ Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () 
 
     //social media settings
     Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
+
+
 });
 
 //** -------------User Routes-------------- */
