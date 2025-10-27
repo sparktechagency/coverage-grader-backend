@@ -110,10 +110,9 @@ Route::middleware('auth:sanctum', 'throttle:api')->prefix('v1')->group(function 
     Route::apiResource('contacts', ContactUsController::class)->only(['store', 'index', 'show', 'destroy']);
     Route::put('contacts/{contact}/mark-as-read', [ContactUsController::class, 'markAsRead']);
 
+    //**metadata */
     //metadata
-    Route::apiResource('meta-datas', MetaDataController::class)->except(['create', 'edit', 'update']);
-
-
+    Route::apiResource('meta-datas', MetaDataController::class)->only(['store', 'destroy']);
     //**---------Notification routes----------- */
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/stats', [NotificationController::class, 'stats']);
@@ -141,7 +140,8 @@ Route::middleware('throttle:api')->prefix('v1/')->name('v1')->group(function () 
     //social media settings
     Route::get('social-media-settings', [SettingsController::class, 'getSocialMediaSettings'])->name('settings.socialMedia.get');
 
-
+    //metadata
+    Route::apiResource('meta-datas', MetaDataController::class)->only(['index', 'show']);
 });
 
 //** -------------User Routes-------------- */
