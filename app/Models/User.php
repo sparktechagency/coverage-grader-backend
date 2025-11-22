@@ -92,7 +92,7 @@ class User extends Authenticatable
 
         return $value
             ?  Storage::disk('public')->url($value)
-            : "https://ui-avatars.com/api/?background=random&name={$encodedName}&bold=true";
+            : "https://ui-avatars.com/api/?background=random&name=CG&bold=true";
     }
 
 }
