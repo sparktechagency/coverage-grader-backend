@@ -30,6 +30,7 @@ class InsuranceProviderRequest extends BaseRequest
             'states.*' => 'exists:states,id',
             'policies' => 'nullable|array',
             'policies.*' => 'exists:policy_categories,id',
+            'sponsored_url' => 'nullable|url',
         ];
 
         if ($this->isMethod('put') || $this->isMethod('patch')) {
@@ -51,6 +52,7 @@ class InsuranceProviderRequest extends BaseRequest
                 'states.*' => 'exists:states,id',
                 'policies' => 'sometimes|nullable|array',
                 'policies.*' => 'exists:policy_categories,id',
+                'sponsored_url' => 'sometimes|nullable|url',
             ];
         }
 

@@ -28,6 +28,7 @@ class InsuranceProviderResource extends JsonResource
             'cons' => $this->cons,
             'price' => $this->price,
             'is_sponsored' => $this->is_sponsored,
+            'sponsored_url' => $this->sponsored_url,
             'status' => $this->status,
             'about' => $this->about,
             'states_count' => $this->whenCounted('states', function () {
