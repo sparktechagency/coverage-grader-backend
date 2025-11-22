@@ -30,6 +30,7 @@ class UserResource extends JsonResource
             'last_login_at' => $this->last_login_at ? Carbon::parse($this->last_login_at)->format('Y-m-d') : null,
             // 'last_login_human' => $this->last_login_at ? Carbon::parse($this->last_login_at)->diffForHumans() : null,
             'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
         ];
     }
