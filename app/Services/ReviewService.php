@@ -55,6 +55,7 @@ class ReviewService extends BaseService
             'id',
             'user.first_name',
             'created_at',
+            'overall_rating'
         ];
     }
 
